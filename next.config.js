@@ -12,8 +12,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  // Configuración para Vercel
-  output: 'standalone',
+  // Configuración para Vercel (removido output: 'standalone' para evitar conflictos)
   // Optimización de bundle
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
