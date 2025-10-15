@@ -15,6 +15,13 @@ module.exports = {
         'fsdo-dark': '#1A1A1A', // Negro para texto
         'fsdo-gray': '#F5F5F5', // Gris claro para fondos
         'fsdo-accent': '#E74C3C', // Rojo para botones y acentos
+        
+        // Colores masónicos del logo
+        'masonic-dark': '#1A0033', // Azul oscuro/noche estrellada
+        'masonic-gold': '#FFD700', // Dorado de los símbolos
+        'masonic-white': '#FFFFFF', // Blanco
+        'masonic-gray': '#D3D3D3', // Gris claro del anillo exterior
+        'masonic-black': '#000000', // Negro para contraste
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],

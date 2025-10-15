@@ -57,6 +57,12 @@ export default function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            <Link 
+              href="/login"
+              className="bg-masonic-gold text-masonic-dark px-4 py-2 rounded-full font-semibold text-sm hover:bg-yellow-400 transition-colors duration-300 border border-masonic-gold/50"
+            >
+              MIEMBROS
+            </Link>
             <button className="donation-btn text-white px-6 py-2 rounded-full font-semibold text-sm">
               HAGA UNA DONACIÓN
             </button>
@@ -104,7 +110,14 @@ export default function Header() {
               >
                 QUÉ HACEMOS
               </Link>
-              <div className="pt-4">
+              <div className="pt-4 space-y-3">
+                <Link
+                  href="/login"
+                  className="block bg-masonic-gold text-masonic-dark px-6 py-2 rounded-full font-semibold text-sm text-center hover:bg-yellow-400 transition-colors duration-300"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  MIEMBROS
+                </Link>
                 <button className="donation-btn text-white px-6 py-2 rounded-full font-semibold text-sm w-full">
                   HAGA UNA DONACIÓN
                 </button>
