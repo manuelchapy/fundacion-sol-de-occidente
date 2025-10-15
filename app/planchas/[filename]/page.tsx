@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, User, X, FileText, Info, Download, ExternalLink } from 'lucide-react'
+import { ArrowLeft, User, X, FileText, Info, Download } from 'lucide-react'
 import { checkAuthentication } from '@/lib/auth'
 import { getPlanchaByFilename, AUTHOR_INFO } from '@/lib/planchas'
 
@@ -12,7 +12,6 @@ export default function PlanchaViewerPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [showAuthorModal, setShowAuthorModal] = useState(false)
   const [filename, setFilename] = useState('')
-  const [isPdfLoading, setIsPdfLoading] = useState(true)
   const router = useRouter()
   const params = useParams()
 
@@ -43,10 +42,6 @@ export default function PlanchaViewerPage() {
     setShowAuthorModal(false)
   }
 
-  const handlePdfLoad = () => {
-    setIsPdfLoading(false)
-  }
-
   const handleDownload = () => {
     const link = document.createElement('a')
     link.href = `/planchas/${encodeURIComponent(filename)}`
@@ -56,9 +51,6 @@ export default function PlanchaViewerPage() {
     document.body.removeChild(link)
   }
 
-  const handleOpenInNewTab = () => {
-    window.open(`/planchas/${encodeURIComponent(filename)}`, '_blank')
-  }
 
   if (!isAuthenticated) {
     return (
@@ -116,22 +108,6 @@ export default function PlanchaViewerPage() {
             {/* Action Buttons */}
             <div className="flex items-center space-x-3">
               <button
-                onClick={handleOpenInNewTab}
-                className="flex items-center space-x-2 bg-masonic-white/20 text-masonic-white px-4 py-2 rounded-lg hover:bg-masonic-white/30 transition-colors duration-300 font-medium border border-masonic-white/30"
-              >
-                <ExternalLink size={16} />
-                <span>Abrir</span>
-              </button>
-              
-              <button
-                onClick={handleDownload}
-                className="flex items-center space-x-2 bg-masonic-white/20 text-masonic-white px-4 py-2 rounded-lg hover:bg-masonic-white/30 transition-colors duration-300 font-medium border border-masonic-white/30"
-              >
-                <Download size={16} />
-                <span>Descargar</span>
-              </button>
-              
-              <button
                 onClick={handleAuthorInfo}
                 className="flex items-center space-x-2 bg-masonic-gold/20 text-masonic-gold px-4 py-2 rounded-lg hover:bg-masonic-gold/30 transition-colors duration-300 font-medium border border-masonic-gold/30"
               >
@@ -164,54 +140,42 @@ export default function PlanchaViewerPage() {
             </div>
           </div>
           
-          {/* PDF Viewer */}
-          <div className="relative bg-masonic-white rounded-b-xl" style={{ height: '80vh' }}>
-            {/* Loading indicator */}
-            {isPdfLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-masonic-white z-10 rounded-b-xl">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-masonic-gold mx-auto mb-4"></div>
-                  <p className="text-masonic-dark font-medium">Cargando plancha...</p>
+          {/* PDF Info and Download */}
+          <div className="bg-masonic-white rounded-b-xl p-12" style={{ height: '80vh' }}>
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center max-w-md">
+                {/* PDF Icon */}
+                <div className="flex items-center justify-center w-32 h-32 bg-masonic-gold/20 rounded-full mx-auto mb-8">
+                  <FileText className="h-16 w-16 text-masonic-gold" />
                 </div>
-              </div>
-            )}
-            
-            {/* PDF Object */}
-            <object
-              data={`/planchas/${encodeURIComponent(filename)}#toolbar=1&navpanes=1&scrollbar=1&page=1&view=FitH`}
-              type="application/pdf"
-              className="w-full h-full"
-              style={{ minHeight: '600px' }}
-              onLoad={handlePdfLoad}
-            >
-              {/* Fallback content */}
-              <div className="flex items-center justify-center h-full bg-masonic-gray/10">
-                <div className="text-center p-8">
-                  <FileText className="h-16 w-16 text-masonic-gray mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-masonic-dark mb-2">
-                    No se puede mostrar el PDF
-                  </h3>
-                  <p className="text-masonic-gray mb-4">
-                    Tu navegador no soporta la visualización de PDFs embebidos.
+
+                {/* PDF Info */}
+                <h3 className="text-2xl font-bold text-masonic-dark mb-4">
+                  {filename.replace('.pdf', '')}
+                </h3>
+                <p className="text-masonic-gray mb-8 text-lg">
+                  Plancha masónica disponible para descarga
+                </p>
+
+                {/* Download Button */}
+                <button
+                  onClick={handleDownload}
+                  className="bg-gradient-to-r from-masonic-gold to-yellow-400 text-masonic-dark font-bold py-4 px-8 rounded-xl hover:from-yellow-400 hover:to-masonic-gold transform hover:scale-105 transition-all duration-300 shadow-lg text-lg"
+                >
+                  <Download className="h-6 w-6 inline mr-3" />
+                  Descargar Plancha
+                </button>
+
+                {/* Additional Info */}
+                <div className="mt-8 p-4 bg-masonic-gray/10 rounded-lg">
+                  <p className="text-sm text-masonic-gray">
+                    <strong>Autor:</strong> Manuel Chaparro<br />
+                    <strong>Formato:</strong> PDF<br />
+                    <strong>Tamaño:</strong> Disponible al descargar
                   </p>
-                  <div className="space-y-2">
-                    <button
-                      onClick={handleDownload}
-                      className="w-full bg-masonic-gold text-masonic-dark font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition-colors duration-300"
-                    >
-                      <Download className="h-4 w-4 inline mr-2" />
-                      Descargar PDF
-                    </button>
-                    <button
-                      onClick={() => window.open(`/planchas/${encodeURIComponent(filename)}`, '_blank')}
-                      className="w-full bg-masonic-dark text-masonic-white font-bold py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-300"
-                    >
-                      Abrir en Nueva Pestaña
-                    </button>
-                  </div>
                 </div>
               </div>
-            </object>
+            </div>
           </div>
         </div>
       </main>
